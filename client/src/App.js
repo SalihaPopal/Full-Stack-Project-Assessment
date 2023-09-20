@@ -8,7 +8,7 @@ function App() {
   useEffect(() => {
     const fetchVideosData = async () => {
       try {
-        const response = await fetch("https://full-stack-back-end.onrender.com");
+        const response = await fetch("https://full-stack-back-end.onrender.com", {mode:'cors'});
         if (!response.ok) {
           console.log("Failed to fetch data. Status code:", response.status);
           throw new Error("Failed to fetch data");
@@ -38,7 +38,7 @@ function App() {
       <div key={video.id}>
         <h5>{video.title}</h5>
         <p>{video.url}</p>
-        <p>{`rating: video.rating`}</p>
+        <p>{`rating: ${video.rating}`}</p>
       </div>
     ))}
       <Handlers />

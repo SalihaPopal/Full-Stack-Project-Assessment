@@ -10,13 +10,21 @@ const corsOptions = {
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 };
 
+// Enable CORS for requests from 'http://localhost:3000'
+app.use((req, res, next) => {
+  res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+  next();
+});
+
+
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 // Middleware to parse JSON request bodies
+app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(cors(corsOptions));
+app.use(cors());
 
 const db = new Pool({
   port: process.env.DB_PORT,
@@ -32,6 +40,11 @@ db.connect(function (err){
   if (err) throw err;
   console.log("Connected to the database");
 });
+
+app.get('/cors', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.send({ "msg": "This has CORS enabled 🎈" })
+  })
 
 app.get("/", (req, res) => {
   db.query("SELECT * FROM videos")
